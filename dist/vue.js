@@ -4,6 +4,150 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Vue = factory());
 })(this, (function () { 'use strict';
 
+  var ncname = "[a-zA-Z_][\\-\\.0-9_a-zA-Z]*"; // 标签名
+
+  var qnameCapture = "((?:".concat(ncname, "\\:)?").concat(ncname, ")"); // 获取标签名
+
+  var startTagOpen = new RegExp("^<".concat(qnameCapture)); //开始标签
+
+  var endTag = new RegExp("^<\\/".concat(qnameCapture, "[^>]*>")); //结束标签
+
+  var attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/; // 标签属性
+
+  var startTagClose = /^\s*(\/?)>/; // 标签闭合
+  // 通过栈将解析的结果组装成一个树结构
+
+  function createAstElement(tagName, attrs) {
+    return {
+      tag: tagName,
+      type: 1,
+      children: [],
+      parent: null,
+      attrs: attrs
+    };
+  }
+
+  var root = null,
+      stack = []; // 开始标签
+
+  function start(tagName, attributes) {
+    console.log(tagName);
+    var element = createAstElement(tagName, attributes);
+
+    if (stack.length > 0) {
+      var parent = stack[stack.length - 1];
+      element.parent = parent;
+      parent.children.push(element);
+    }
+
+    if (!root) {
+      root = element;
+    }
+
+    stack.push(element);
+  } // 结束标签
+
+
+  function end(tagName) {
+    var last = stack.pop();
+
+    if (last.tag !== tagName) {
+      throw new Error('标签有误！');
+    }
+  } // 文本内容
+
+
+  function chars(text) {
+    text = text.replace('/\s/g', '');
+    var parent = stack[stack.length - 1];
+
+    if (text) {
+      parent.children.push({
+        type: 3,
+        text: text
+      });
+    }
+  } // 将html解析成对应的脚本来触发tokens
+
+
+  function parseHTML(html) {
+    function advance(len) {
+      html = html.substring(len);
+    }
+
+    function parseStartTag() {
+      var start = html.match(startTagOpen);
+
+      if (start) {
+        var match = {
+          tagName: start[1],
+          attrs: []
+        };
+        advance(start[0].length);
+
+        var _end, attr; // 如果没有遇到闭合标签则不停的解析
+
+
+        while (!(_end = html.match(startTagClose)) && (attr = html.match(attribute))) {
+          // 将匹配到属性标签删除
+          match.attrs.push({
+            name: attr[1],
+            value: attr[3] || attr[4] || attr[5]
+          });
+          advance(attr[0].length);
+        }
+
+        if (_end) {
+          advance(_end[0].length);
+        } // 返回匹配到的属性和标签名
+
+
+        return match;
+      }
+
+      return false;
+    }
+
+    while (html) {
+      var textEnd = html.indexOf('<');
+
+      if (textEnd === 0) {
+        // 解析开始标签
+        var startTagMatch = parseStartTag();
+
+        if (startTagMatch) {
+          start(startTagMatch.tagName, startTagMatch.attrs);
+          continue;
+        } // 解析结束标签
+
+
+        var endTagMatch = html.match(endTag);
+
+        if (endTagMatch) {
+          end(endTagMatch[1]);
+          advance(endTagMatch[0].length);
+          continue;
+        }
+      }
+
+      var text = void 0;
+
+      if (textEnd > 0) {
+        text = html.substring(0, textEnd);
+      }
+
+      if (text) {
+        chars(text);
+        advance(text.length);
+      }
+    }
+  }
+
+  function compileToFunction(template) {
+    parseHTML(template);
+    console.log(root);
+  }
+
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -178,6 +322,27 @@
       // 对数据进行初始化 data watch computed
 
       initState(vm);
+
+      if (vm.$options.el) {
+        vm.$mounted(vm.$options.el);
+      }
+    };
+
+    Vue.prototype.$mounted = function (el) {
+      var vm = this;
+      var options = vm.$options;
+      el = document.querySelector(el); // 优先级：render > template > el
+
+      if (!options.render) {
+        var template = options.template; // 如果用户没有传template则取el的内容作为模板
+
+        if (!template && el) {
+          template = el.outerHTML;
+          var render = compileToFunction(template); // 将render函数添加到options上
+
+          options.render = render;
+        }
+      }
     };
   }
 
