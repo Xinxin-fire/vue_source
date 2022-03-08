@@ -4,6 +4,79 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Vue = factory());
 })(this, (function () { 'use strict';
 
+  function genProps(attrs) {
+    return attrs.reduce(function (pre, cur, index) {
+      if (cur.name === 'style') {
+        var styleObj = {};
+        cur.value.replace(/([^;:]+)\:([^;:]+)/g, function () {
+          styleObj[arguments[1]] = arguments[2];
+        });
+        cur.value = styleObj;
+      }
+
+      if (index === attrs.length - 1) {
+        pre += "".concat(cur.name, ":").concat(JSON.stringify(cur.value));
+      } else {
+        pre += "".concat(cur.name, ":").concat(JSON.stringify(cur.value), ",");
+      }
+
+      return pre;
+    }, '');
+  }
+
+  var defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; // 匹配{{}}
+
+  function gen(el) {
+    if (el.type === 1) {
+      return generate(el);
+    } else {
+      var text = el.text;
+
+      if (!defaultTagRE.test(text)) {
+        return "_v('".concat(text, "')");
+      } else {
+        var tokens = [],
+            match,
+            lastIndex = defaultTagRE.lastIndex = 0;
+
+        while (match = defaultTagRE.exec(text)) {
+          var index = match.index;
+
+          if (index > lastIndex) {
+            tokens.push(JSON.stringify(text.slice(lastIndex, index)));
+          }
+
+          tokens.push("_s(".concat(match[1].trim(), ")"));
+          lastIndex = index + match[0].length;
+        }
+
+        if (lastIndex < text.length) {
+          tokens.push(JSON.stringify(text.slice(lastIndex)));
+        }
+
+        return "_v(".concat(tokens.join('+'), ")");
+      }
+    }
+  }
+
+  function genChildren(el) {
+    var children = el.children;
+
+    if (children) {
+      return children.map(function (item) {
+        return gen(item);
+      }).join(',');
+    }
+
+    return false;
+  }
+
+  function generate(el) {
+    var children = genChildren(el);
+    var code = "_c('".concat(el.tag, "',").concat(el.attrs.length ? genProps(el.attrs) : 'undefined').concat(children ? ",".concat(children) : '', ")");
+    return code;
+  }
+
   var ncname = "[a-zA-Z_][\\-\\.0-9_a-zA-Z]*"; // 标签名
 
   var qnameCapture = "((?:".concat(ncname, "\\:)?").concat(ncname, ")"); // 获取标签名
@@ -31,7 +104,6 @@
       stack = []; // 开始标签
 
   function start(tagName, attributes) {
-    console.log(tagName);
     var element = createAstElement(tagName, attributes);
 
     if (stack.length > 0) {
@@ -141,11 +213,14 @@
         advance(text.length);
       }
     }
+
+    return root;
   }
 
   function compileToFunction(template) {
-    parseHTML(template);
-    console.log(root);
+    var root = parseHTML(template);
+    var code = generate(root);
+    console.log(code); // html => ast => render函数 =》 虚拟dom =》 真实dom
   }
 
   function _classCallCheck(instance, Constructor) {
