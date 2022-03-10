@@ -1,4 +1,5 @@
 import { compileToFunction } from "./compiler/index"
+import { mountComponent } from "./lifecycle"
 import { initState } from "./state"
 
 // 在vue的基础上做一次混合操作，为vue原型添加方法
@@ -27,6 +28,9 @@ export function initMixin(Vue) {
         let render = compileToFunction(template)
         // 将render函数添加到options上
         options.render = render
+        console.log(options.render)
+        // 组件挂载流程
+        mountComponent(vm, el)
       }
     }
   }

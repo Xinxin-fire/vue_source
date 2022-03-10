@@ -15,13 +15,13 @@
       }
 
       if (index === attrs.length - 1) {
-        pre += "".concat(cur.name, ":").concat(JSON.stringify(cur.value));
+        pre += "".concat(cur.name, ":").concat(JSON.stringify(cur.value), "}");
       } else {
         pre += "".concat(cur.name, ":").concat(JSON.stringify(cur.value), ",");
       }
 
       return pre;
-    }, '');
+    }, '{');
   }
 
   var defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; // 匹配{{}}
@@ -220,7 +220,22 @@
   function compileToFunction(template) {
     var root = parseHTML(template);
     var code = generate(root);
-    console.log(code); // html => ast => render函数 =》 虚拟dom =》 真实dom
+    var render = new Function("with(this){return ".concat(code, "}"));
+    return render;
+  }
+
+  function lifecycleMixin(Vue) {
+    Vue.prototype._update = function () {};
+  }
+  function mountComponent(vm, el) {
+    // 更新函数，数据变化后会再次调用此函数
+    var updateComponent = function updateComponent() {
+      // 调用render函数，生成虚拟dom
+      // 用虚拟dom生成真实dom
+      vm._update(vm._render());
+    };
+
+    updateComponent();
   }
 
   function _classCallCheck(instance, Constructor) {
@@ -416,8 +431,61 @@
           var render = compileToFunction(template); // 将render函数添加到options上
 
           options.render = render;
+          console.log(options.render); // 组件挂载流程
+
+          mountComponent(vm);
         }
       }
+    };
+  }
+
+  function creatElement(vm, tag) {
+    var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+    for (var _len = arguments.length, children = new Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+      children[_key - 3] = arguments[_key];
+    }
+
+    return vnode(vm, tag, data, data.key, children, undefined);
+  }
+  function creatTextElement(vm, text) {
+    return vnode(vm, undefined, undefined, undefined, undefined, text);
+  }
+
+  function vnode(vm, tag, data, key, children, text) {
+    return {
+      vm: vm,
+      tag: tag,
+      data: data,
+      key: key,
+      children: children,
+      text: text
+    };
+  }
+
+  function renderMixin(Vue) {
+    Vue.prototype._c = function (tag, data) {
+      for (var _len = arguments.length, children = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+        children[_key - 2] = arguments[_key];
+      }
+
+      return creatElement.apply(void 0, [this].concat(Array.prototype.slice.call(arguments)));
+    };
+
+    Vue.prototype._v = function (text) {
+      return creatTextElement(this, text);
+    };
+
+    Vue.prototype._s = function (val) {
+      return JSON.stringify(val);
+    };
+
+    Vue.prototype._render = function () {
+      var vm = this;
+      var render = vm.$options.render;
+      var vnode = render.call(vm);
+      console.log(vnode);
+      return vnode;
     };
   }
 
@@ -428,6 +496,9 @@
 
 
   initMixin(Vue);
+  renderMixin(Vue); // _render
+
+  lifecycleMixin(Vue); // _update
 
   return Vue;
 

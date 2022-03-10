@@ -8,12 +8,12 @@ function genProps(attrs) {
       cur.value = styleObj
     }
     if (index === attrs.length - 1) {
-      pre += `${cur.name}:${JSON.stringify(cur.value)}`
+      pre += `${cur.name}:${JSON.stringify(cur.value)}}`
     } else {
       pre += `${cur.name}:${JSON.stringify(cur.value)},`
     }
     return pre
-  }, '')
+  }, '{')
 }
 const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g // 匹配{{}}
 function gen(el) {
