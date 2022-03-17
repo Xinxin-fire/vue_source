@@ -1,8 +1,14 @@
-export function lifecycleMixin(Vue) {
-  Vue.prototype._update = function () {
+import Watcher from "./observer/watch"
+import { patch } from "./vdom/patch"
+
+ export function lifecycleMixin(Vue) {
+  //  开始时触发，需要更新时也需要触发
+  Vue.prototype._update = function (vnode) {
+    const vm = this
+    vm.$el = patch(vm.$el, vnode)
   }
 }
-
+// 后续每个组件渲染的时候都会有一个watcher
 export function mountComponent(vm, el) {
   // 更新函数，数据变化后会再次调用此函数
   let updateComponent = () => {
@@ -10,5 +16,10 @@ export function mountComponent(vm, el) {
     // 用虚拟dom生成真实dom
     vm._update(vm._render())
   }
-  updateComponent()
+  // 观察者模式：属性是被观察者，刷新页面：观察者
+  // 此外渲染的watcher
+  new Watcher(vm, updateComponent, () => {
+    console.log('更新视图了')
+  }, true)
+  // updateComponent()
 }

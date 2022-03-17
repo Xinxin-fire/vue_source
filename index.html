@@ -17,13 +17,19 @@
       el: '#app',
       data() {
         return {
-          name: 'huyuxin',
-          kid: [1, 2, 3]
+          name: 'yule',
+          kid: [1, 2, 3],
+          obj: {
+            a: 1
+          }
         }
       }
     })
-    // console.log(vm)
-    // console.log(vm.kid)
+    setTimeout(() => {
+      vm.name = 'yule1'
+      // data数据改变，render函数通过this去取当前变量的值就会改变，再通过_update()去更新真实dom时页面就会发生变化
+      vm._update(vm._render()) 
+    }, 1000)
   </script>
 </body>
 

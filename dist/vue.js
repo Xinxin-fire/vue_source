@@ -224,20 +224,6 @@
     return render;
   }
 
-  function lifecycleMixin(Vue) {
-    Vue.prototype._update = function () {};
-  }
-  function mountComponent(vm, el) {
-    // 更新函数，数据变化后会再次调用此函数
-    var updateComponent = function updateComponent() {
-      // 调用render函数，生成虚拟dom
-      // 用虚拟dom生成真实dom
-      vm._update(vm._render());
-    };
-
-    updateComponent();
-  }
-
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -261,6 +247,89 @@
       writable: false
     });
     return Constructor;
+  }
+
+  var Watcher = /*#__PURE__*/function () {
+    // new Watcher(vm, updateComponent, () => {
+    //   console.log('更新视图了')
+    // }, true)
+    function Watcher(vm, exprOrFn, cb, options) {
+      _classCallCheck(this, Watcher);
+
+      this.vm = vm;
+      this.exprOrFn = exprOrFn;
+      this.cb = cb;
+      this.options = options;
+      this.getter = exprOrFn; //  默认执行get方法，调用render函数 
+
+      this.get();
+    }
+
+    _createClass(Watcher, [{
+      key: "get",
+      value: function get() {
+        // 用户更新时，调用get方法即可
+        // 由于已经对数据进行了劫持，可以在Object.defineProperty()中的get方法中与watcher进行关联
+        // 一个watcher可以监听多个属性，一个属性也可以对应多个watcher 
+        this.getter();
+      }
+    }]);
+
+    return Watcher;
+  }();
+
+  function patch(oldVnode, vnode) {
+    if (oldVnode.nodeType === 1) {
+      var parentElm = oldVnode.parentNode;
+      var elm = creatElm(vnode);
+      parentElm.insertBefore(elm, oldVnode.nextSibling);
+      parentElm.removeChild(oldVnode); // 返回新创建的节点用于作为下次更新的老节点
+
+      return elm;
+    }
+  }
+
+  function creatElm(vnode) {
+    var tag = vnode.tag;
+        vnode.data;
+        var children = vnode.children,
+        text = vnode.text;
+        vnode.vm;
+
+    if (typeof tag === 'string') {
+      // 将创建的元素添加到vnode的el属性上
+      vnode.el = document.createElement(tag);
+      children.forEach(function (child) {
+        vnode.el.appendChild(creatElm(child));
+      });
+    } else {
+      vnode.el = document.createTextNode(text);
+    }
+
+    return vnode.el;
+  }
+
+  function lifecycleMixin(Vue) {
+    //  开始时触发，需要更新时也需要触发
+    Vue.prototype._update = function (vnode) {
+      var vm = this;
+      vm.$el = patch(vm.$el, vnode);
+    };
+  } // 后续每个组件渲染的时候都会有一个watcher
+
+  function mountComponent(vm, el) {
+    // 更新函数，数据变化后会再次调用此函数
+    var updateComponent = function updateComponent() {
+      // 调用render函数，生成虚拟dom
+      // 用虚拟dom生成真实dom
+      vm._update(vm._render());
+    }; // 观察者模式：属性是被观察者，刷新页面：观察者
+    // 此外渲染的watcher
+
+
+    new Watcher(vm, updateComponent, function () {
+      console.log('更新视图了');
+    }, true); // updateComponent()
   }
 
   function isFunction(val) {
@@ -421,7 +490,8 @@
     Vue.prototype.$mounted = function (el) {
       var vm = this;
       var options = vm.$options;
-      el = document.querySelector(el); // 优先级：render > template > el
+      el = document.querySelector(el);
+      vm.$el = el; // 优先级：render > template > el
 
       if (!options.render) {
         var template = options.template; // 如果用户没有传template则取el的内容作为模板
@@ -430,8 +500,7 @@
           template = el.outerHTML;
           var render = compileToFunction(template); // 将render函数添加到options上
 
-          options.render = render;
-          console.log(options.render); // 组件挂载流程
+          options.render = render; // 组件挂载流程
 
           mountComponent(vm);
         }
@@ -477,14 +546,17 @@
     };
 
     Vue.prototype._s = function (val) {
-      return JSON.stringify(val);
+      if (isObject(val)) {
+        return JSON.stringify(val);
+      } else {
+        return val;
+      }
     };
 
     Vue.prototype._render = function () {
       var vm = this;
       var render = vm.$options.render;
       var vnode = render.call(vm);
-      console.log(vnode);
       return vnode;
     };
   }
