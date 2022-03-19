@@ -1,5 +1,6 @@
 import { isObject } from "../utils"
 import { arrayMethods } from "./array"
+import Dep from "./dep"
 
 // 通过类来检测数据，类有类型
 class Observer {
@@ -32,13 +33,23 @@ class Observer {
 function defineReactive(data, key, value) {
   // 如果对象中的属性还是对象则需要递归调用监测方法
   observe(value)
+  let dep = new Dep()
   Object.defineProperty(data, key, {
     get() {
+      // Dep.target的用于判断视图是否需要更新，只有在视图需要更新的时候才需要收集watcher
+      if (Dep.target) {
+        // 取值时让dep和watcher对应起来
+        dep.depend()
+      }
       return value
     },
     set(newV) {
-      observe(newV) // 如果给对象的属性复制的是一个新对象，则需要对新对象重新劫持
-      value = newV
+      if (value !== newV) {
+        observe(newV) // 如果给对象的属性复制的是一个新对象，则需要对新对象重新劫持
+        value = newV
+        // 调用更新方法
+        dep.notify()
+      }
     }
   })
 }

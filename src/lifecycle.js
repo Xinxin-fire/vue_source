@@ -17,7 +17,7 @@ export function mountComponent(vm, el) {
     vm._update(vm._render())
   }
   // 观察者模式：属性是被观察者，刷新页面：观察者
-  // 此外渲染的watcher
+  // 此处是渲染的watcher
   new Watcher(vm, updateComponent, () => {
     console.log('更新视图了')
   }, true)

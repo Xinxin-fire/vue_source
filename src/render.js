@@ -9,7 +9,7 @@ export function renderMixin(Vue) {
     return creatTextElement(this, text)
   }
   Vue.prototype._s = function (val) {
-    if (isObject(val)) {
+    if (isObject(val) || Array.isArray(val)) {
       return JSON.stringify(val)
     } else {
       return val
