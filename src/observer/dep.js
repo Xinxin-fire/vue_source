@@ -15,7 +15,6 @@ class Dep {
     this.subs.push(watcher)
   }
   notify() {
-    console.log(this.subs)
     this.subs.forEach(watcher => watcher.update())
   }
 }

@@ -1,4 +1,5 @@
 import { popTarget, pushTarget } from "./dep"
+import { queueWathcer } from "./scheduler"
 
 let id = 1
 class Watcher {
@@ -25,6 +26,9 @@ class Watcher {
     popTarget()
   }
   update() {
+    queueWathcer(this) 
+  }
+  run() {
     this.get()
   }
   addDep(dep) {
