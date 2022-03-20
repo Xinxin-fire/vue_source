@@ -6,14 +6,17 @@ class Dep {
     // 用来存放wathcer
     this.subs = []
   }
+  // watcher中收集dep
   depend() {
     if (Dep.target) {
       Dep.target.addDep(this)
     }
   }
+  // dep中收集watcher
   addSub(watcher) {
     this.subs.push(watcher)
   }
+  // 更新dep中存放watcher的视图
   notify() {
     this.subs.forEach(watcher => watcher.update())
   }

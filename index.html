@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <div id="app" style="color: red;">{{name}}{{obj.a}}</div>
+  <div id="app" style="color: red;">{{kid}}{{obj.a}}</div>
   <script src="./dist/vue.js">
   </script>
   <script>
@@ -18,7 +18,7 @@
       data() {
         return {
           name: 'yule',
-          kid: [1, 2, 3],
+          kid: [[1, 2, 3]],
           obj: {
             a: 1
           }
@@ -26,8 +26,8 @@
       }
     })
     setTimeout(() => {
-      vm.obj.a = 'yule1'
-      vm.name = 'yule1'
+      // vm.obj.a = 'yule1'
+      vm.kid[0].push(234)
       // data数据改变，render函数通过this去取当前变量的值就会改变，再通过_update()去更新真实dom时页面就会发生变化
       // vm._update(vm._render()) 
     }, 1000)
