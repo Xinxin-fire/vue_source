@@ -1,3 +1,4 @@
+import Dep from "./observer/dep"
 import { observe } from "./observer/index"
 import Watcher from "./observer/watch"
 import { isFunction } from "./utils"
@@ -18,6 +19,10 @@ export function initState(vm) { // 状态初始化
   // 初始化watch
   if (opts.watch) {
     initWatch(vm, opts.watch)
+  }
+  // 初始化computed
+  if (opts.computed) {
+    initComputed(vm, opts.computed)
   }
 }
 function proxy(vm, source, key) {
@@ -42,7 +47,7 @@ function initData(vm) {
 }
 
 function initWatch(vm, watch) {
-  for(let key in watch) {
+  for (let key in watch) {
     let handler = watch[key];
     if (Array.isArray(handler)) {
       handler.forEach(func => {
@@ -55,4 +60,40 @@ function initWatch(vm, watch) {
 }
 function creatWatcher(vm, key, handler) {
   return vm.$watch(key, handler)
+}
+
+function initComputed(vm, computed) {
+  const watches = vm._computedWatchers = {}
+  for(let key in computed) {
+    const userDef = computed[key]
+    let getter = typeof userDef === 'function' ? userDef : userDef.get
+    // 每个计算属性的本质就是watcher
+    watches[key] = new Watcher(vm, getter, () => {}, { lazy: true})
+
+    // 将key定义在vm上便于对属性进行劫持
+    defineComputed(vm, key, userDef)
+  }
+}
+function creatComputedGetter(key) {
+  return function computedGetter() {
+    // 拿到计算属性对应的watcher
+    let watcher = this._computedWatchers[key]
+    if (watcher.dirty) {
+      watcher.evaluate()
+    }
+    if (Dep.target) {
+      watcher.depend() // watcher 对应了多个dep
+    }
+    return watcher.value
+  }
+}
+function defineComputed(vm, key, userDef) {
+  let sharedProperty = {}
+  if (typeof userDef === 'function') {
+    sharedProperty.get = userDef
+  } else {
+    sharedProperty.get = creatComputedGetter(key)
+    sharedProperty.set = userDef.set
+  }
+  Object.defineProperty(vm, key, sharedProperty)
 }

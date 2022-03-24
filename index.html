@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <div id="app" style="color: red;">{{kid}}{{obj.a}}</div>
+  <div id="app" style="color: red;">{{ info }}</div>
   <script src="./dist/vue.js">
   </script>
   <script>
@@ -25,30 +25,39 @@
           }
         }
       },
-      watch: {
-        name: function(newV, oldV) {
-          console.log(newV, oldV)
-        },
-        age: [
-          function(newV, oldV) {
-            console.log(newV)
+      // watch: {
+      //   name: function(newV, oldV) {
+      //     // console.log(newV, oldV)
+      //   }
+      // },
+      computed: {
+        // info: function() {
+        //   console.log(1)
+        //   return this.name + this.age
+        // }
+        info: {
+          get() {
+            console.log('info')
+            return this.name + this.age
           },
-          function(newV, oldV) {
-            console.log(oldV)
-          },
-        ],
-        'obj.a': function(newV, oldV) {
-          console.log(newV)
+          // set(newValue) {
+          //   console.log(newValue)
+          // }
         }
       }
     })
     setTimeout(() => {
-      vm.name = 123
+      vm.name = 12345
+      console.log(vm.info)
+      console.log(vm.info)
+      // vm.name = 123
       // vm.obj.a = 'yule1'
       // vm.kid[0].push(234)
       // data数据改变，render函数通过this去取当前变量的值就会改变，再通过_update()去更新真实dom时页面就会发生变化
       // vm._update(vm._render()) 
     }, 1000)
+    // vm.info
+    // vm.info
   </script>
 </body>
 
