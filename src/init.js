@@ -8,6 +8,7 @@ export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
     const vm = this
     vm.$options = mergeOptions(vm.constructor.options, options) //方便对options进行扩展
+    console.log(vm.$options)
     // 对数据进行初始化 data watch computed
     callHook(vm, 'beforeCreate')
     initState(vm)

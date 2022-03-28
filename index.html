@@ -13,31 +13,24 @@
   <script src="./dist/vue.js">
   </script>
   <script>
-    Vue.mixin({
-      beforeCreate() {
-        console.log('haha2')
-      }
-    })
-    Vue.mixin({
-      beforeCreate() {
-        console.log('haha3')
-      }
+    Vue.component('my-button', {
+      template: '<my-button>hahah</my-button>'
     })
     let vm = new Vue({
       el: '#app',
+      components: {
+        'my-button': {
+          template: '<my-button>xixiix</my-button>'
+        }
+      },
       data() {
         return {
           name: 'yule',
-          age: '111',
-          kid: [[1, 2, 3]],
           obj: {
             a: 1
           }
         }
       },
-      beforeCreate() {
-        console.log('haha1')
-      }
     })
   </script>
 </body>
