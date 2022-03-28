@@ -1,3 +1,4 @@
+import { initGloabApi } from "./gloab-api/index.js"
 import { initMixin } from "./init"
 import { lifecycleMixin } from "./lifecycle"
 import { renderMixin } from "./render"
@@ -12,4 +13,7 @@ initMixin(Vue)
 stateMixin(Vue)
 renderMixin(Vue) // _render
 lifecycleMixin(Vue) // _update
+
+// 扩展类 Vue.mixin
+initGloabApi(Vue)
 export default Vue
