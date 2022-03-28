@@ -81,9 +81,15 @@ export function mergeOptions(parent, child) {
       if (isObject(parentVal) && isObject(childVal)) {
         options[key] = {...parentVal, ...childVal}
       } else {
-        options[key] = childVal
+        options[key] = childVal || parentVal
       }
     }
   }
   return options
+}
+
+// 判断是不是原生标签
+export function isReservedTag(str) {
+  let reservedTag = 'a, div, span, p, img, button, ul, li'
+  return reservedTag.includes(str)
 }

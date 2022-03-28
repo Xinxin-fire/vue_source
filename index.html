@@ -9,19 +9,32 @@
 </head>
 
 <body>
-  <div id="app" style="color: red;">{{ name }}</div>
+  <div id="app"><my-button></my-button></div>
   <script src="./dist/vue.js">
   </script>
   <script>
     Vue.component('my-button', {
-      template: '<my-button>hahah</my-button>'
+      template: '<button>hahah</button>'
     })
     let vm = new Vue({
       el: '#app',
       components: {
         'my-button': {
-          template: '<my-button>xixiix</my-button>'
-        }
+          template: '<button>xixiix</button>',
+          beforeCreate() {
+            console.log('before child')
+          },
+          mounted() {
+            console.log('mounted child')
+          },
+        },
+        
+      },
+      beforeCreate() {
+        console.log('before parent')
+      },
+      mounted() {
+        console.log('mounted parent')
       },
       data() {
         return {

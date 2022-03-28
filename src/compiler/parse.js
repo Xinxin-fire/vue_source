@@ -5,50 +5,50 @@ const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`) //结束标签
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/ // 标签属性
 const startTagClose = /^\s*(\/?)>/ // 标签闭合
 
-// 通过栈将解析的结果组装成一个树结构
-function createAstElement(tagName, attrs) {
-  return {
-    tag: tagName,
-    type: 1,
-    children: [],
-    parent: null,
-    attrs
-  }
-}
-let root = null, stack = []
-// 开始标签
-function start(tagName, attributes) {
-  let element = createAstElement(tagName, attributes)
-  if (stack.length > 0) {
-    let parent = stack[stack.length - 1]
-    element.parent = parent
-    parent.children.push(element)
-  }
-  if (!root) {
-    root = element
-  }
-  stack.push(element)
-}
-// 结束标签
-function end(tagName) {
-  let last = stack.pop()
-  if (last.tag !== tagName) {
-    throw new Error('标签有误！')
-  }
-}
-// 文本内容
-function chars(text) {
-  text = text.replace('/\s/g', '')
-  let parent = stack[stack.length - 1]
-  if (text) {
-    parent.children.push({
-      type: 3,
-      text
-    })
-  }
-}
 // 将html解析成对应的脚本来触发tokens
 export function parseHTML(html) {
+  // 通过栈将解析的结果组装成一个树结构
+  function createAstElement(tagName, attrs) {
+    return {
+      tag: tagName,
+      type: 1,
+      children: [],
+      parent: null,
+      attrs
+    }
+  }
+  let root = null, stack = []
+  // 开始标签
+  function start(tagName, attributes) {
+    let element = createAstElement(tagName, attributes)
+    if (stack.length > 0) {
+      let parent = stack[stack.length - 1]
+      element.parent = parent
+      parent.children.push(element)
+    }
+    if (!root) {
+      root = element
+    }
+    stack.push(element)
+  }
+  // 结束标签
+  function end(tagName) {
+    let last = stack.pop()
+    if (last.tag !== tagName) {
+      throw new Error('标签有误！')
+    }
+  }
+  // 文本内容
+  function chars(text) {
+    text = text.replace('/\s/g', '')
+    let parent = stack[stack.length - 1]
+    if (text) {
+      parent.children.push({
+        type: 3,
+        text
+      })
+    }
+  }
   function advance(len) {
     html = html.substring(len)
   }

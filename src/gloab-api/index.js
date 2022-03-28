@@ -19,8 +19,8 @@ export function initGloabApi(Vue) {
   // 创建一个继承Vue的类，并有父类的所有功能
   Vue.extend = function(options) {
     const Super = this
-    const Sub = function VueComponent() {
-      this._init()
+    const Sub = function VueComponent(options) {
+      this._init(options)
     }
     // 原型继承
     Sub.prototype = Object.create(Super.prototype)
