@@ -9,42 +9,24 @@
 </head>
 
 <body>
-  <div id="app"><my-button></my-button></div>
+  <div id="app"><li>{{msg}}</li></div>
   <script src="./dist/vue.js">
   </script>
   <script>
-    Vue.component('my-button', {
-      template: '<button>hahah</button>'
-    })
     let vm = new Vue({
       el: '#app',
-      components: {
-        'my-button': {
-          template: '<button>xixiix</button>',
-          beforeCreate() {
-            console.log('before child')
-          },
-          mounted() {
-            console.log('mounted child')
-          },
-        },
-        
-      },
-      beforeCreate() {
-        console.log('before parent')
-      },
-      mounted() {
-        console.log('mounted parent')
-      },
       data() {
         return {
-          name: 'yule',
+          msg: 'yule',
           obj: {
             a: 1
           }
         }
       },
     })
+    setTimeout(() => {
+      vm.msg = 'zf'
+    }, 1000)
   </script>
 </body>
 

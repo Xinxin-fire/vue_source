@@ -6,7 +6,13 @@ import { patch } from "./vdom/patch"
   //  开始时触发，需要更新时也需要触发
   Vue.prototype._update = function (vnode) {
     const vm = this
-    vm.$el = patch(vm.$el, vnode)
+    const preVnode = vm._vnode
+    if (!preVnode) { //初次渲染
+      vm.$el = patch(vm.$el, vnode)
+    } else {
+      vm.$el = patch(preVnode, vnode)
+    }
+    vm._vnode = vnode
   }
   Vue.prototype.$nextTick = nextTick
 }
