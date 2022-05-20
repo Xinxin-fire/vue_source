@@ -24,7 +24,7 @@ export function initMixin(Vue) {
     vm.$el = el
     // 优先级：render > template > el
     if (!options.render) {
-      let template = options.template
+      let template = options.template 
       // 如果用户没有传template则取el的内容作为模板
       if (!template && el) {
         template = el.outerHTML
