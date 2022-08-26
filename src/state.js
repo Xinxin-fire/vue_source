@@ -16,13 +16,13 @@ export function initState(vm) { // 状态初始化
   if (opts.data) {
     initData(vm)
   }
-  // 初始化watch
-  if (opts.watch) {
-    initWatch(vm, opts.watch)
-  }
   // 初始化computed
   if (opts.computed) {
     initComputed(vm, opts.computed)
+  }
+  // 初始化watch
+  if (opts.watch) {
+    initWatch(vm, opts.watch)
   }
 }
 function proxy(vm, source, key) {
