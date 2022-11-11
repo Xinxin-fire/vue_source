@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="canvas" width="1000", height="500"></canvas>
+  <!-- <div style="color: #00ffff;">123</div> -->
+  <script>
+    // 获取画布的dom
+    const canvasDom = document.getElementById('canvas');
+    // 获取画布的上下文（画笔）
+    let ctx = canvasDom.getContext('2d');
+    console.log(ctx);
+    const img = new Image();
+    // 图例
+    img.src = './fly.jpg';
+    img.onload = function() {
+      ctx.drawImage(img, 0, 0)
+    }
+    // 线条设置
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "#b4b4b4"
+    ctx.lineCap="round";
+    ctx.lineJoin="round";
+
+    // 画圆
+    ctx.beginPath();
+    ctx.arc(getCoordinateX(249), getCoordinateY(269), 14, 0, Math.PI * 2)
+    ctx.stroke()
+    ctx.beginPath();
+    ctx.arc(getCoordinateX(300), getCoordinateY(286), 14, 0, Math.PI * 2);
+    ctx.stroke()
+
+    // 画基本线条
+    ctx.beginPath();
+    ctx.moveTo(getCoordinateX(226), getCoordinateY(226));
+    ctx.lineTo(getCoordinateX(320), getCoordinateY(261));
+    ctx.lineTo(getCoordinateX(383), getCoordinateY(289));
+    ctx.lineTo(getCoordinateX(425), getCoordinateY(248));
+    ctx.lineTo(getCoordinateX(460), getCoordinateY(256));
+    ctx.lineTo(getCoordinateX(411), getCoordinateY(338));
+    ctx.stroke()
+
+    // 头部
+    ctx.beginPath();
+    ctx.moveTo(getCoordinateX(195), getCoordinateY(308));
+    ctx.quadraticCurveTo(getCoordinateX(36), getCoordinateY(190),getCoordinateX(226), getCoordinateY(226));
+    ctx.stroke();
+
+    // 底部弧线
+    ctx.beginPath();
+    ctx.moveTo(getCoordinateX(195), getCoordinateY(308));
+    ctx.quadraticCurveTo(getCoordinateX(289), getCoordinateY(336),getCoordinateX(411), getCoordinateY(338));
+    ctx.stroke();
+
+    // 右翼
+    ctx.beginPath();
+    ctx.moveTo(getCoordinateX(226), getCoordinateY(226));
+    ctx.quadraticCurveTo(getCoordinateX(394), getCoordinateY(160),getCoordinateX(320), getCoordinateY(261));
+    ctx.stroke();
+
+    // 左翼
+    ctx.beginPath();
+    ctx.moveTo(getCoordinateX(195), getCoordinateY(308));
+    ctx.quadraticCurveTo(getCoordinateX(293), getCoordinateY(480),getCoordinateX(290), getCoordinateY(331));
+    ctx.stroke();
+
+    // 内圈
+    ctx.beginPath();
+    ctx.moveTo(getCoordinateX(140), getCoordinateY(220));
+    ctx.quadraticCurveTo(getCoordinateX(180), getCoordinateY(280),getCoordinateX(226), getCoordinateY(226));
+    ctx.stroke();
+    function getCoordinateX(X) {
+      return X + 500
+    }
+    function getCoordinateY(Y) {
+      return Y  - 130
+    }
+    
+  </script>
+  <script src="./test.js"></script>
+  <style>
+  </style>
+</body>
+</html>

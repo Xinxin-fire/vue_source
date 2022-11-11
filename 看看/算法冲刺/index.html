@@ -7,23 +7,26 @@
   <title>Document</title>
 </head>
 <body>
-  <canvas id="canvas" width="500", height="500"></canvas>
-  <div style="color: #00ffff;">123</div>
+  <input id="file" type="file"/>
+  <div id="images"></div>
   <script>
-    // 获取画布的dom
-    const canvasDom = document.getElementById('canvas');
-    // 获取画布的上下文（画笔）
-    let ctx = canvasDom.getContext('2d');
-    console.log(ctx);
-    ctx.moveTo(50, 50);
-    ctx.lineTo(50,100)
-    // ctx.closePath()
-    ctx.moveTo(100, 100);
-    ctx.lineTo(100,200)
-    ctx.strokeStyle = 'aqua'
-    ctx.stroke();
+    // let webWorker = new Worker('test.js');
+    var myTask = `
+      onmessage = function (e) {
+          var data = e.data;
+          console.log('worker:', data);
+          postMessage([1,2,3])
+      };
+    `;
+    let arr = [1,2,3,4]
+    var blob = new Blob([myTask]);
+    var myWorker = new Worker(window.URL.createObjectURL(blob));
+    myWorker.postMessage(arr)
+    myWorker.onmessage = function(e) {
+      console.log(e.data);
+    }
   </script>
-  <script src="./test.js"></script>
+  <!-- <script src="./test.js"></script> -->
   <style>
   </style>
 </body>
