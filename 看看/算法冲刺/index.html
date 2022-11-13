@@ -7,27 +7,33 @@
   <title>Document</title>
 </head>
 <body>
-  <input id="file" type="file"/>
-  <div id="images"></div>
+  <div id="source" draggable="true">source</div>
+  <div id="target" draggable="true">target</div>
+  <iframe id="iframe" src="https://www.baidu.com/" width="500" height="500"></iframe>
   <script>
-    // let webWorker = new Worker('test.js');
-    var myTask = `
-      onmessage = function (e) {
-          var data = e.data;
-          console.log('worker:', data);
-          postMessage([1,2,3])
-      };
-    `;
-    let arr = [1,2,3,4]
-    var blob = new Blob([myTask]);
-    var myWorker = new Worker(window.URL.createObjectURL(blob));
-    myWorker.postMessage(arr)
-    myWorker.onmessage = function(e) {
-      console.log(e.data);
-    }
+    const iframe = document.getElementById('iframe')
+    console.log(window.frames[0])
+    console.log(iframe.contentWindow)
+    console.log(iframe.contentDocument)
   </script>
   <!-- <script src="./test.js"></script> -->
   <style>
+    #source {
+      margin: 10px auto;
+      height: 100px;
+      text-align: center;
+      line-height: 100px;
+      width: 100px;
+      background-color: aqua;
+    }
+    #target {
+      margin: 10px auto;
+      height: 100px;
+      width: 100px;
+      text-align: center;
+      line-height: 100px;
+      background-color:cornflowerblue;
+    }
   </style>
 </body>
 </html>
