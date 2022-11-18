@@ -7,33 +7,21 @@
   <title>Document</title>
 </head>
 <body>
-  <div id="source" draggable="true">source</div>
-  <div id="target" draggable="true">target</div>
-  <iframe id="iframe" src="https://www.baidu.com/" width="500" height="500"></iframe>
-  <script>
-    const iframe = document.getElementById('iframe')
-    console.log(window.frames[0])
-    console.log(iframe.contentWindow)
-    console.log(iframe.contentDocument)
-  </script>
-  <script src="./test.js"></script>
+  <div class="container"></div>
+  <!-- <div class="item">123</div> -->
   <style>
-    #source {
-      margin: 10px auto;
-      height: 100px;
-      text-align: center;
-      line-height: 100px;
-      width: 100px;
-      background-color: aqua;
+    .container {
+      width: 200px;
+      height: 200px;
+      background-color:aqua;
+      float: left;
     }
-    #target {
-      margin: 10px auto;
-      height: 100px;
-      width: 100px;
-      text-align: center;
-      line-height: 100px;
-      background-color:cornflowerblue;
+    .item {
+      height: 100px; 
+      background-color: beige;
+      overflow: hidden;
     }
   </style>
+  <script src="./test.js"></script>
 </body>
 </html>

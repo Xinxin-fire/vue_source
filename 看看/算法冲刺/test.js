@@ -1,19 +1,16 @@
-var reverseWords = function(s) {
-  let str = s.trim();
-  let arr = [];
-  let cur = ''
-  for (let i = 0; i <  str.length; i++) {
-      if (str[i] === ' ' && cur === '' && i !== 0) {
-          continue;
+var longestPalindrome = function(s) {
+  let res = '';
+  function getRes(s, i, j) {
+      let left = i,right = j;
+      while(left >= 0 && right < s.length && s[left] === s[right]) {
+              left--;
+              right++;
       }
-      if (str[i] === ' ') {
-          arr.push(cur)
-          cur = ''
-      } else {
-
-        cur += str[i] 
-      }
+      return s.slice(left, right + 1)
   }
-  return arr.reverse().join(' ')
+  for (let i = 0; i < s.length; i++) {
+      res = Math.max(getRes(s, i,i+1), getRes(s, i,i), res)
+  }
+  return res;
 };
-console.log(reverseWords("the sky is blue"));
+console.log(longestPalindrome('cbbd'));
