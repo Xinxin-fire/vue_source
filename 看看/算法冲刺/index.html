@@ -7,21 +7,34 @@
   <title>Document</title>
 </head>
 <body>
-  <div class="container"></div>
-  <!-- <div class="item">123</div> -->
+  <div class="parent">
+    <div class="son"></div>
+    <div class="son"></div>
+  </div>
   <style>
-    .container {
-      width: 200px;
-      height: 200px;
-      background-color:aqua;
-      float: left;
+    .parent {
+      background-color: aqua;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      position: absolute;
     }
-    .item {
-      height: 100px; 
-      background-color: beige;
-      overflow: hidden;
+    .son {
+      background-color: blue;
+      height: 50px;
+      width: 50px;
+      position: absolute;
+      top: 28px;
+      z-index: 11;
     }
   </style>
-  <script src="./test.js"></script>
+  <script src="./test.js">
+    // 明日计划
+    // 1.复习css所有内容
+    // 2.复习并总结算法字符串章节
+    // 3.css动画实现
+    // 4.js 1-2天 的内容
+  </script>
 </body>
 </html>

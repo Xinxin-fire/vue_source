@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <img class="img" src="./Peashooter.webp"></div>
+  <img class="img-bg" src="./backgound.webp"></div>
+  <div class="bullet bullet1"></div>
+  <div class="bullet bullet2"></div>
+  <div class="bullet bullet3"></div>
+  <div class="bullet bullet4"></div>
+  <style>
+    .img {
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      top: 353px;
+      left: 321px;
+    }
+    .img-bg {
+      width: 1200px;
+      height: 630px;
+    }
+    .bullet1 {
+      animation: bullet 4s linear 1s infinite;
+      /* animation: transparant 1s linear 1s infinite; */
+    }
+    .bullet2 {
+      animation: bullet 4s linear 2s infinite, transparant 4s;;
+    }
+    .bullet3 {
+      animation: bullet 4s linear 3s infinite, transparant 6s;;
+    }
+    .bullet4 {
+      animation: bullet 4s linear 4s infinite, transparant 8s;
+    }
+    .bullet {
+      width: 26px;
+      height: 26px;
+      border-radius: 13px;
+      background-color: #a9d74b;
+      border: 1px solid #000;
+      position: absolute;
+      top: 369px;
+      left: 429px;
+    
+      /* animation: bullet 1s linear infinite; */
+    }
+    @keyframes bullet {
+      0% {
+        left: 429px;
+      }
+      100% {
+        left: 929px;
+      }
+    }
+    @keyframes transparant {
+      0% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 0;
+      }
+      51% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  </style>
+  <script src="./test.js">
+    // 明日计划
+    // 1.复习css所有内容
+    // 2.复习并总结算法字符串章节
+    // 3.css动画实现
+    // 4.js 1-2天 的内容
+  </script>
+</body>
+</html>
