@@ -8,27 +8,16 @@
 </head>
 <body>
   <div class="parent">
-    <div class="son"></div>
-    <div class="son"></div>
+    <iframe id="iframe" src="" width="100" height="100"></iframe>
   </div>
   <style>
-    .parent {
-      background-color: aqua;
-      width: 100px;
-      height: 100px;
-      display: flex;
-      justify-content: center;
-      position: absolute;
-    }
-    .son {
-      background-color: blue;
-      height: 50px;
-      width: 50px;
-      position: absolute;
-      top: 28px;
-      z-index: 11;
-    }
+    
   </style>
+  <script>
+    const element = document.getElementById('iframe');
+    console.log(element);
+    console.log(element);
+  </script>
   <script src="./test.js">
     // 明日计划
     // 1.复习css所有内容
