@@ -9,14 +9,31 @@
   <title>Document</title>
 </head>
 <body>
-  <div id="parent"></div>
- 
- <script src="./test.js" type="module"></script>
- <script>
-  const element = document.getElementById('parent');
-  console.log(window.getComputedStyle(element).width)
- </script>
-  
-  
+ <div class="parent">
+  <div class="left">left</div>
+  <div class="right">right</div>
+ </div>
+ <style>
+  .parent {
+    /* overflow: hidden; */
+    position: relative;
+    display: grid;
+  /* 将其划分为两行，其中一列有本身宽度决定， 一列占剩余宽度*/
+  grid-template-columns: auto 1fr;
+  }
+  .left {
+    /* float: left; */
+    /* position: absolute; */
+    height: 100px;
+    width: 200px;
+    background-color: aqua;
+  }
+  .right {
+    height: 50px;
+    /* margin-left: 200px; */
+    /* overflow: hidden; */
+    background-color:blanchedalmond;
+  }
+ </style>
 </body>
 </html>
