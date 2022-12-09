@@ -15,24 +15,15 @@
  </div>
  <style>
   .parent {
-    /* overflow: hidden; */
-    position: relative;
-    display: grid;
-  /* 将其划分为两行，其中一列有本身宽度决定， 一列占剩余宽度*/
-  grid-template-columns: auto 1fr;
+    display: flex;
   }
   .left {
-    /* float: left; */
-    /* position: absolute; */
-    height: 100px;
-    width: 200px;
-    background-color: aqua;
+    /* display: inline-block; */
+    font-size: 14px;
   }
   .right {
-    height: 50px;
-    /* margin-left: 200px; */
-    /* overflow: hidden; */
-    background-color:blanchedalmond;
+    /* display: inline-block; */
+    font-size: 28px;
   }
  </style>
 </body>
