@@ -40,7 +40,7 @@ function dependArray(value) {
 }
 // 对对象的属性进行遍历，用defineProperty对对象的数据进行劫持
 function defineReactive(data, key, value) {
-  // 如果对象中的属性还是对象则需要递归调用监测方法
+  // 如果对象中的属性的值还是对象则需要递归调用监测方法
   const childOb = observe(value)
   let dep = new Dep()
   Object.defineProperty(data, key, {
