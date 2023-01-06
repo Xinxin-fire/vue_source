@@ -1,25 +1,19 @@
-let stack = [];
-// 最不活跃的就剔除；
-let arr = [1,2,3,4];
-stack.push(arr.pop())
-stack.push(arr.pop())
-stack.push(arr.pop())
-class LRU {
-  constructor(max) {
-    this.max = max;
-    this.instance = [];
+class Storage {
+  constructor() {
+    this.instance = new Map();
   }
-  push(x) {
-    if(this.instance.length === max) {
-      this.instance.shift();
+  static getInstance() {
+    if (Storage.instance) {
+      return Storage.instance
+    } else {
+      Storage.instance = new Storage();
+      return Storage.instance
     }
-    this.instance.push(x);
   }
-  get(x) {
-    if (this.instance.includes(x)) {
-      let index = this.instance.indexOf(x);
-      this.instance.splice(index, 1);
-      this.push(x);
-    }
+  getItem(key) {
+    return this.instance.get(key)
+  }
+  setItem(key, value) {
+    this.instance.set(key, value)
   }
 }
