@@ -1,20 +1,25 @@
-
-class State {
-  static obj = {
-    a:1,
-    b: function() {
-      console.log(this);
-    }
+function quickSort(arr, left=0, right = arr.length -1) {
+  if (left >= right) {
+    return;
   }
-  getObj() {
-    console.log(this);
-  }
+  let index = partition(arr, left,right);
+  quickSort(arr, index+ 1, right);
+  quickSort(arr, left, index-1);
 }
 
-let state = new State();
-console.log(state);
-// state.obj.a = 2;
-state.obj.b();
-state.getObj();
-let state1 = new State();
-console.log(state1);
+function partition (arr, left, right) {
+    let mid = Math.floor((left + right) / 2);
+    let target = arr[mid];
+    while(left < right) {
+      if (nums[left] < target) {
+        left++
+      }
+      if (nums[right] > target) {
+        right--
+      }
+      if (left < right) {
+        [nums[left], nums[right]] = [nums[right], nums[left]];
+      }
+    }
+    return left;
+}
