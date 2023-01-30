@@ -2,43 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>单例模式弹框</title>
+    <title>test</title>
 </head>
-<style>
-    .parent {
-        width: 100px;
-        height: 200px;
-        background-color: aqua;
-    }
-    .son {
-      background-color: tomato;
-      padding-top: 100%;
-    }
-    .square {
-      width: 20%;
-      height: 0;
-      padding-top: 20%;
-      background: orange;
-      animation: test 1s infinite;
-    }
-    /* .square:hover {
-      width: 40%;
-      transition: width 1s;
-    } */
-    @keyframes test{
-      0% {
-        width: 20%;
-      }
-      100% {
-        width: 60%;
-      }
-    }
-
-</style>
 <body>
 	<div class="parent">
-    <div class="square">123</div>
+    <div>sasd</div>
+    <div class="son"></div>
+    <span class="bottom">234</span>
   </div>
+  <div class="bottom">123</div>
+  <style>
+    .parent {
+      height: 50px;
+      width: 40%;
+      background-color: aqua;
+    }
+    .son {
+      height: 100px;
+      width: 20%;
+      float: left;
+      background-color:antiquewhite;
+    }
+    .bottom {
+      clear: both;
+    }
+  </style>
   <script src="./test.js"></script>
 </body>
 </html>

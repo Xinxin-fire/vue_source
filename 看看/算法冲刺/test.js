@@ -1,25 +1,22 @@
-function quickSort(arr, left=0, right = arr.length -1) {
-  if (left >= right) {
-    return;
-  }
-  let index = partition(arr, left,right);
-  quickSort(arr, index+ 1, right);
-  quickSort(arr, left, index-1);
-}
+var restoreIpAddresses = function(s) {
+  let result = []
+  function dfs(res, use, cur) {
+    if (cur > 255 || res.split('.').length > 4) {
+      return;
+    }
+    if (res.split('.').length === 4 && use === s.length -1) {
+      result.push(res);
+    }
+    for (let i = use; i< s.length; i++) {
+      if (res) {
+        dfs(res+'.' + cur, i+1, s[i])
+      } else {
 
-function partition (arr, left, right) {
-    let mid = Math.floor((left + right) / 2);
-    let target = arr[mid];
-    while(left < right) {
-      if (nums[left] < target) {
-        left++
-      }
-      if (nums[right] > target) {
-        right--
-      }
-      if (left < right) {
-        [nums[left], nums[right]] = [nums[right], nums[left]];
+        dfs(s[i]+cur, i+1, s[i]+cur)
       }
     }
-    return left;
-}
+  }
+  dfs('', 0, '');
+  return result;
+};
+console.log(restoreIpAddresses("25525511135"));

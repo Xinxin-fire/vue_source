@@ -91,6 +91,7 @@ var findKthLargest = function(nums, k) {
       let i = low;
       let j =2 * i + 1;
       while(j <= high) {
+        // 如果右节点比左节点小则用右节点和当前根节点比较
           if (j + 1 <= high && heap[j+1] < heap[j]) {
               j = j + 1
           }
