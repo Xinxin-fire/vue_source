@@ -4,9 +4,10 @@ let obj= {
 }
 let b = Symbol('a')
 obj[b] = 'a'
-console.log(Reflect.ownKeys(obj));
 obj[Symbol.iterator] = function() {
   let keys = Reflect.ownKeys(obj);
+  const index = keys.indexOf(Symbol.iterator);
+  keys.splice(index, 1)
   let count = 0;
   return {
     next() {
