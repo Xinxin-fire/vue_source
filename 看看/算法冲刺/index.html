@@ -7,43 +7,12 @@
   <title>Document</title>
 </head>
 <body>
-  <div class="container">
-    <div class="item1">1111</div>
-    <div class="item2">2222</div>
-    <!-- <div class="item3">3333</div>
-    <div class="item4">4444</div> -->
-  </div>
+  
+  <button><input type="file" multiple class="input"/>上传多张</button>
   <style>
-    .container {
-      display: grid;
-      grid-auto-flow: column;
-      justify-items: center;
-      align-items: center;
-      justify-content: center;
-      align-content: center;
-      width: 500px;
-      height: 500px;
-      grid-template-columns: 60px 1fr;
-      /* grid-template-rows: 100px 1fr 2fr; */
-      gap: 10px 20px;
-      /* grid-template-areas: "header header header"
-                            "main main sidebar"
-                            "footer other1 other2"; */
+    .input {
+      display: none;
     }
-    div[class*="item"] {
-      border: 1px solid rebeccapurple;
-      width: 100px;
-      height: 100px;
-    }
-    /* .item1 {    
-      grid-area: header;
-    }
-    .item4 {    
-      grid-area: other2;
-    }
-    .item3 {    
-      grid-area: other2;
-    } */
   </style>
   <script src="./test.js"></script>
 </body>

@@ -1,14 +1,62 @@
-let p1 = new Promise((resolve, reject) => {
-  resolve(1);
-})
-console.log(p1);
-let p2 = p1.then(
-  (res) => {
-    resolve(res+1)
-    console.log(res);
+var data = {
+  fileterType: 'union',
+  properties: {
+    fileterType: 'union',
+    list: [
+      {
+        fileterType: 'union',
+        list: [
+          {
+            type: '用户属性',
+            property: 'vip等级',
+            rule: 'all',
+            value: '1'
+          },
+        ]
+      }
+    ]
   },
-  // (err) => {
-  //   console.log(err);
-  // },
-)
-console.log(p2);
+  actions: {
+    fileterType: 'union',
+    list: [
+      {
+        fileterType: 'union',
+        list: [
+          {
+            time: '2023-02-08',
+            done: 'true',
+            count: 2,
+            actionType: '埋点',
+            action: 'Web浏览页面',
+            filterList: {
+              fileterType: 'union',
+              list: [
+                {
+                  type: '用户属性',
+                  property: 'vip等级',
+                  rule: 'all',
+                  value: '1'
+                },
+              ]
+            }
+          },
+        ]
+      }
+    ]
+  },
+  combinations: [
+    {
+      fileterType: 'union',
+      actionType: '埋点',
+      action: 'Web浏览页面',
+      list: [
+        {
+          type: '用户属性',
+          property: 'vip等级',
+          rule: 'all',
+          value: '1'
+        },
+      ]
+    }
+  ]
+}
