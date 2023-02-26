@@ -29,7 +29,9 @@ Function.prototype.myBind =  function (context) {
   }
   let args = [...arguments].slice(1);
   let fn = this;
+  console.log('this:', this)
   return function Fn() {
+    console.log('fn', fn)
     return fn.apply(this instanceof Fn ? this: context, args.concat(...arguments));
   }
 }
@@ -37,5 +39,7 @@ function fn(a) {
   console.log(a);
 }
 let b = {};
+let d = {};
 let c = fn.myBind(b, 1);
-console.log(c('c','d'));
+let e = c.myBind(d, 1)
+e()

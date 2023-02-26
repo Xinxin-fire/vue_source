@@ -1,81 +1,16 @@
-// // 岛屿题
-// DFS递归
-// 边界处理
-if (i < 0 || j < 0 || i >= m || j >= n) {
-  // 超出索引边界
-  return;
-}
-// 递归方向
-dfs(grid, i + 1, j);
-dfs(grid, i, j + 1);
-dfs(grid, i - 1, j);
-dfs(grid, i, j - 1);
-// 标记已经递归过的路径
-grid[i][j] = '0';
-var exist = function (board, word) {
-  let m = board.length;
-  let n = board[0].length;
-  let used = new Array(m).fill(false).map(() => new Array(n).fill(false))
-  for (let i = 0; i < m; i++) {
-    for (let j = 0; j < n; j++) {
-      if (board[i][j] === word[0] && dfs(i, j, 0)) {
-          return true;
-      }
-    }
-  }
-  return false;
-  function dfs(i, j, curIndex) {
-    if (curIndex === word.length) {
-      return true;
-    }
-    if (i < 0 || i >= m || j < 0 || j >= m) {
-      return false;
-    }
-    if (used[i][j] || board[i][j] !== word[curIndex]) {
-      return false;
-    }
-    used[i][j] = true;
-    const flag = dfs(i + 1, j, curIndex + 1) || dfs(i - 1, j, curIndex + 1) || dfs(i, j + 1, curIndex + 1) || dfs(i, j -1, curIndex + 1)
-    used[i][j] = false;
-    return flag;
-  }
-};
-const exist = (board, word) => {
-  const m = board.length;
-  const n = board[0].length;
-  const used = new Array(m);    // 二维矩阵used，存放bool值
-  for (let i = 0; i < m; i++) {
-      used[i] = new Array(n);
-  }
-  for (let i = 0; i < m; i++) { // 遍历找起点，作为递归入口
-    for (let j = 0; j < n; j++) {
-      if (board[i][j] == word[0] && canFind(i, j, 0)) { // 找到起点且递归结果为真，找到目标路径
-        return true; 
-      }
-    }
-  }
-  return false; // 怎么样都没有返回true，则返回false
-  function canFind(row, col, i) { // row col 当前点的坐标，i当前考察的word字符索引
-      if (i == word.length) {        // 递归的出口 i越界了就返回true
-          return true;
-      }
-      if (row < 0 || row >= m || col < 0 || col >= n) { // 当前点越界 返回false
-          return false;
-      }
-      if (used[row][col] || board[row][col] != word[i]) { // 当前点已经访问过，或，非目标点
-          return false;
-      }
-      // 排除掉所有false的情况，当前点暂时没毛病，可以继续递归考察
-      used[row][col] = true;  // 记录一下当前点被访问了
-      // canFindRest：基于当前选择的点[row,col]，能否找到剩余字符的路径。
-      const canFindRest = canFind(row + 1, col, i + 1) || canFind(row - 1, col, i + 1) ||
-          canFind(row, col + 1, i + 1) || canFind(row, col - 1, i + 1); 
+// 组合问题
+// 1.不可重复不可复选
+// 2.可重复不可复选
+// 3.不可重复可复选
 
-      if (canFindRest) { // 基于当前点[row,col]，可以为剩下的字符找到路径
-          return true;    
-      }
-      used[row][col] = false; // 不能为剩下字符找到路径，返回false，撤销当前点的访问状态
-      return false;
-  };
+// 排列组合问题本质是回溯问题，利用回溯将每次的选择组成一个多叉树，再利用题目的限制条件对回溯进行剪枝，最后输出最终的结果
 
-};
+// 子集 不可重复不可复选 利用一个临时数组在前序位置把每个节点的路径值收集起来，通过固定元素的相对位置保证不出现重复的子集
+// 组合 不可重复不可复选 和上面代码基本一致只需要控制代码的层数即可
+// 全排列 不可重复不可复选 利用map标记已经使用过的元素，避免重复使用
+
+// 子集2 可重复不可复选 对数组进行排序，在遍历第二次时判断当前元素和其前一个元素是否相等，相等则跳过
+// 组合总和2 可重复不可复选 和上述代码基本相同，只多了一个子集求和的操作
+// 全排列2 可重复不可复选 排序数组，使用used标记已经使用过的元素，对于重复的元素，通过保证元素的顺序不变来进行去重，例如i和i-1两个元素， 如果i-1没有使用过,i元素一定没有被使用，通过!used[i-1]可以去重
+
+// 组合总和 不重复可复选 让一个元素可重复使用则将下一轮的起始索引由i+1调整为i即可
