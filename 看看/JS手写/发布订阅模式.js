@@ -36,3 +36,7 @@ class EventEmitter {
     }
   }
 }
+
+let eventEmitter = new EventEmitter();
+eventEmitter.emit('change', 124);
+eventEmitter.on('change', function(e) {console.log(e);});
