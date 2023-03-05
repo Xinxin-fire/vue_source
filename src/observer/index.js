@@ -50,6 +50,7 @@ function defineReactive(data, key, value) {
         // 取值时让dep和watcher对应起来
         dep.depend()
         if (childOb) {
+          // 如果当前属性的值是一个对象，将对象的dep也要收集watcher
           childOb.dep.depend()
           // 对数组进行递归收集
           if (Array.isArray(value)) {
