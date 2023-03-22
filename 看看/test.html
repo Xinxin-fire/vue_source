@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<script type="module">
+  // import {getCLS, getFID,getFCP,getTTFB, getLCP} from 'https://unpkg.com/web-vitals?module';
+  //   getCLS(console.log);
+  //   getFID(console.log);
+  //   getLCP(console.log);
+  //   getFCP(console.log);
+  //   getTTFB(console.log);
+
+new PerformanceObserver((entryList) => {
+  for (const entry of entryList.getEntries()) {
+    console.log('LCP candidate:', entry.startTime, entry);
+  }
+}).observe({type: 'largest-contentful-paint', buffered: true});
+
+// console.log(performance.getEntriesByName("first-contentful-paint"));
+
+// new PerformanceObserver((entryList) => {
+//   for (const entry of entryList.getEntries()) {
+//         if (entry.entryType === 'paint') {
+//       if (entry.name === 'first-paint') {
+//         console.log('fp:',entry.startTime); 
+//       }
+//       if (entry.name === 'first-contentful-paint') {
+//           console.log('fcp:',entry.startTime); 
+//       }
+//     }
+//   }
+// }).observe({type: 'paint', buffered: true});
+
+// const timer= setTimeout(()=>{
+//   const divEle=document.createElement('div');
+//   divEle.innerHTML='hello'
+// document.body.appendChild(divEle)
+// // clearTimeout(timer)
+// },2000)
+
+
+// for(let i=0;i<1000000*1000;i++){
+
+// }
+
+
+
+
+// s
+// console.log(575675);
+
+const startBtn=document.getElementById('memory')
+// 点击按钮，就执行一次函数，申请一块内存
+// startBtn.addEventListener("click", function() {
+// 	var a = new Array(100000).fill(1);
+// 	var b = new Array(20000).fill(1);
+// });
+
+
+// 点击按钮，就执行一次函数，申请一块内存
+var memoryArr = [];
+startBtn.addEventListener("click", function() {
+	var a = new Array(100000).fill(1);
+	var b = new Array(20000).fill(1);
+    memoryArr.push(b);
+});
+
+
+
+</script>
+
+<body>
+  <div>hello</div>
+  <button id="memory">click me</button>
+
+  <!-- <img src="https://static.wbolt.com/wp-content/uploads/2021/08/webpagetest-lcp-testpng.png" alt=""> -->
+</body>
+
+</html>
