@@ -1,43 +1,54 @@
- function ListNode(val, next) {
-  this.val = (val===undefined ? 0 : val)
-  this.next = (next===undefined ? null : next)
-}
-var sortList = function(head) {
-  function changeList(pre, list1, list2) {
-    let next = list2.next;
-    pre.next = list2;
-    list2.next = list1;
-    list1.next = next;
-  }
-  let dommy = new ListNode(-1);
-  dommy.next = head;
-  let cur1 = dommy;
-  while(cur1.next && cur1.next.next) {
-    let cur2 = dommy;
-    while(cur2.next && cur2.next.next) {
-      if (cur2.next.val > cur2.next.next.val) {
-        changeList(cur2, cur2.next, cur2.next.next)
-        cur2 = cur2.next
-      } else {
-        cur2 = cur2.next
-      }
+var numEnclaves = function(grid) {
+  let row = grid.length;
+  let col = grid[0].length;
+  for (let i = 0; i < row; i++) {
+    if (grid[i][0] === 1) {
+      dfs(i, 0);
     }
-    console.log(dommy)
-    cur1 = cur1.next
+    if (grid[i][col-1] === 1) {
+      dfs(i, col-1);
+    }
   }
-  return dommy.next
+  for (let j = 0; j < col; j++) {
+    if (grid[0][j] === 1) {
+      dfs(0, j);
+    }
+    if (grid[row-1][j] === 1) {
+      dfs(row-1, j);
+    }
+  }
+  console.log(grid);
+  let res = 0;
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+    if (grid[i][j] === 1) {
+      res++
+    }
+    }
+  }
+  return res
+  function dfs(i, j) {
+    if (i < 0 || i >= row || j < 0 || j >= col) {
+      return;
+    }
+    if (grid[i][j] === 1) {
+      grid[i][j] = 0;
+      dfs(i -1, j)
+      dfs(i + 1, j)
+      dfs(i, j - 1)
+      dfs(i, j + 1)
+    }
+  }
 };
-let head = {
-  val: 4, 
-  next: {
-    val: 3,
-    next: {
-      val: 2,
-      next: {
-        val: 1,
-        next: null
-      }
-    }
-  }
-}
-console.log(sortList(head));
+console.log(numEnclaves([
+  [0,0,0,1,1,1,0,1,0,0],
+  [1,1,0,0,0,1,0,1,1,1],
+  [0,0,0,1,1,1,0,1,0,0],
+  [0,1,1,0,0,0,1,0,1,0],
+  [0,1,1,1,1,1,0,0,1,0],
+  [0,0,1,0,1,1,1,1,0,1],
+  [0,1,1,0,0,0,1,1,1,1],
+  [0,0,1,0,0,1,0,1,0,1],
+  [1,0,1,0,1,1,0,0,0,0],
+  [0,0,0,0,1,1,0,0,0,1]
+]));
