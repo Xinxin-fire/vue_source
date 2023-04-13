@@ -1,6 +1,7 @@
-let a = 1;
-Number.prototype.test = 2
-Object.prototype.test = 2
-
-
-console.log(a.test)
+function getItemById(arr) {
+    arr.forEach((ele) => {
+      return ele
+    });
+  return 0;
+}
+console.log(getItemById([1]));
