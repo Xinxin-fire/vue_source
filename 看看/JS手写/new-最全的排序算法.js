@@ -22,10 +22,12 @@ function sort(nums) {
 function sort(nums) {
   for (let i = 0; i < nums.length; i++) {
     let j = i;
+    let temp = nums[j];
     while (nums[j] < nums[j-1] && j > 0) {
+      nums[j] = nums[j-1];
       j--;
     }
-    [nums[j], nums[i]] = [nums[i], nums[j]]
+    nums[j] = temp 
   }
 }
 
@@ -39,24 +41,31 @@ function sort(nums) {
   let rightArr = nums.slice(mid)
   return mergeArr(sort(leftArr), sort(rightArr))
 }
-function mergeArr(num1, nums2) {
-  let nums = [];
-  let i = 0;
-  while(i < num1.length && i < nums2.length) {
-    if (nums1[i] > nums2[i]) {
-      nums.push(nums2[i])
-    } else {
-      nums.push(nums1[i])
-    }
-    i++;
+function mergeArr(arr1, arr2) {  
+  // 初始化两个指针，分别指向 arr1 和 arr2
+  let i = 0, j = 0   
+  // 初始化结果数组
+  const res = []    
+  // 缓存arr1的长度
+  const len1 = arr1.length  
+  // 缓存arr2的长度
+  const len2 = arr2.length  
+  // 合并两个子数组
+  while(i < len1 && j < len2) {
+      if(arr1[i] < arr2[j]) {
+          res.push(arr1[i])
+          i++
+      } else {
+          res.push(arr2[j])
+          j++
+      }
   }
-  if(i < num1.length) {
-    nums.concat(nums1.slice(i))
+  // 若其中一个子数组首先被合并完全，则直接拼接另一个子数组的剩余部分
+  if(i<len1) {
+      return res.concat(arr1.slice(i))
+  } else {
+      return res.concat(arr2.slice(j))
   }
-  if(i < num2.length) {
-    nums.concat(nums2.slice(i))
-  }
-  return nums;
 }
 
 // 快速排序1
